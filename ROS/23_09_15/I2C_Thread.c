@@ -31,13 +31,12 @@ void* I2C_Thread(void* arg)
 
     pthread_mutex_unlock(&i2cMutex1); 
     pthread_mutex_lock(&i2cMutex1);
-	read(I2C_Mod, ReceivedData,Data_Length);
+    read(I2C_Mod, ReceivedData,Data_Length);
     pthread_mutex_unlock(&i2cMutex1);
     
-	EncoderPos=ReceivedData[3]<<24|ReceivedData[4]<<16|ReceivedData[5]<<8|ReceivedData[6];
-	printf("encoder : %d",EncoderPos);
-
-	printf("\n");
+    EncoderPos=ReceivedData[3]<<24|ReceivedData[4]<<16|ReceivedData[5]<<8|ReceivedData[6];
+    printf("encoder : %d",EncoderPos);
+    printf("\n");
     usleep(100000);
   }
 }
@@ -84,6 +83,6 @@ int main()
 		sleep(1);
 	}
 	close(I2C_Mod);
-    pthread_mutex_destroy(&i2cMutex1);
+	pthread_mutex_destroy(&i2cMutex1);
 	return 1;
 }
