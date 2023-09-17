@@ -4,7 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <iostream>
-#include <fcntl.h>
+#include <fSecondl.h>
 #include <linux/i2c-dev.h>
 #include <sys/ioctl.h>
 
