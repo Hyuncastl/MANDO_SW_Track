@@ -1,39 +1,35 @@
 clc;
 clear all;
 close all;
-f = input('\n Input Function (dy/dx) = ', 's');
-f = str2func(['@(x, y)' f]);  % Convert the input function to an anonymous function
-x0 = input('\n Initial x0 = ');
-y0 = input('\n Initial y0 = ');
-h = input('\n Step size h = ');
-xg = input('\n Given Value xg = ');
 
-n = (xg - x0) / h;
+time =25; %input('\n total time : ');
+t = [0.00:0.01:0.01*time];
+m = 80.0;
+b = 50.0;
+g = 9.81;
 
-x_values = zeros(1, n);
-y_values = zeros(1, n);
+v =zeros(time+1);
+k1=zeros(time+1);
+k2=zeros(time+1);
+k3=zeros(time+1);
+k4=zeros(time+1);
 
-disp(['itn x            k1      k2       k3      k4       k      ' ...
-    '' ...
-    'yg'])
-for i = 1:n
-    k1 = h * f(x0, y0);
-    k2 = h * f(x0 + (h / 2), y0 + (k1 / 2));
-    k3 = h * f(x0 + (h / 2), y0 + (k2 / 2));
-    k4 = h * f(x0 + h, y0 + k3);
-    k = (k1 + 2 * k2 + 2 * k3 + k4) / 6;
-    yg = y0 + k;
-    x0 = x0 + h;
-    y0 = yg;
-
-    x_values(i) = x0;
-    y_values(i) = y0;
-
-    fprintf('\n %d%.4f \t%.4f \t%.4f \t%.4f \t%.4f \t%.4f \t%.4f', i, x0, k1, k2, k3, k4, k, yg);
+v(1)=20;%input('\n v0 = ');
+for i=1:1:time
+    k1(i) = (0.01)*(g-b/m* v(i)         ^2);
+    k2(i) = (0.01)*(g-b/m*(v(i)+k1(i)/2)^2);
+    k3(i) = (0.01)*(g-b/m*(v(i)+k2(i)/2)^2);
+    k4(i) = (0.01)*(g-b/m*(v(i)+k3(i)  )^2);
+    if(i<=time)
+        v(i+1)=v(i)+((1/6)*(k1(i)+2*k2(i)+2*k3(i)+k4(i)));
+    end
+end
+fprintf("t         v        k1      k2      k3      k4 \n")
+for i=1:time
+    fprintf("%3.4f  %3.4f %3.4f %3.4f %3.4f %3.4f \n",t(i),v(i),k1(i),k2(i),k3(i),k4(i));
 end
 
-plot(x_values, y_values);
-xlabel('x');
-ylabel('y');
-title('Solution of the Differential Equation');
-grid on;
+plot(t,v);
+title('Runge Kutta v(m/s)');
+xlabel('t');
+ylabel('V','Rotation',0);
